@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kheirdine69.github.io/kb-studio/sitemap.xml
