@@ -151,73 +151,110 @@
     const track = $(".hs-track", hs);
     const cards = $$(".hs-card", hs);
     const bar = $(".hs-bar i", hs);
-    const count = $(".hs-count b", hs);
-    const wide = matchMedia("(min-width: 1001px) and (prefers-reduced-motion: no-preference)");
+    const steps = $$(".hs-steps button", hs);
+    const wide = matchMedia("(min-width: 1001px)");
+    const calm = matchMedia("(prefers-reduced-motion: reduce)");
     let max = 0;
     let travel = 1;
+    let xs = [];
+    let active = -1;
+
+    const setActive = (i) => {
+      if (i === active) return;
+      active = i;
+      steps.forEach((b, j) => {
+        b.classList.toggle("on", j === i);
+        b.setAttribute("aria-current", j === i ? "true" : "false");
+      });
+    };
 
     const update = () => {
       if (!hs.classList.contains("is-pinned")) return;
-      const top = hs.getBoundingClientRect().top;
-      const p = Math.min(1, Math.max(0, -top / travel));
+      const p = Math.min(1, Math.max(0, -hs.getBoundingClientRect().top / travel));
       track.style.transform = `translate3d(${-p * max}px,0,0)`;
-      bar.style.transform = `scaleX(${0.12 + p * 0.88})`;
+      bar.style.transform = `scaleX(${0.08 + p * 0.92})`;
       const vw = document.documentElement.clientWidth;
-      let best = 0, bestDist = Infinity;
+      let best = 0, bd = Infinity;
       cards.forEach((c, i) => {
         const r = c.getBoundingClientRect();
         const d = (r.left + r.width / 2 - vw / 2) / vw;
         const a = Math.min(1, Math.abs(d));
         c.style.setProperty("--d", d.toFixed(3));
-        c.style.opacity = (1 - a * 0.6).toFixed(3);
-        c.style.transform = `scale(${(1 - a * 0.07).toFixed(3)}) rotateY(${(-d * 9).toFixed(2)}deg)`;
-        if (Math.abs(d) < bestDist) { bestDist = Math.abs(d); best = i; }
+        if (calm.matches) {
+          c.style.opacity = (1 - a * 0.5).toFixed(3);
+        } else {
+          c.style.opacity = (1 - a * 0.65).toFixed(3);
+          c.style.transform = `scale(${(1 - a * 0.09).toFixed(3)}) rotateY(${(-d * 10).toFixed(2)}deg)`;
+          c.style.filter = a > 0.03 ? `blur(${(a * 3).toFixed(2)}px)` : "";
+        }
+        if (Math.abs(d) < bd) { bd = Math.abs(d); best = i; }
       });
-      count.textContent = String(best + 1).padStart(2, "0");
+      setActive(best);
+    };
+
+    const unpin = () => {
+      hs.classList.remove("is-pinned");
+      hs.style.height = "";
+      hs.style.removeProperty("--k");
+      track.style.transform = "";
+      track.style.paddingLeft = track.style.paddingRight = "";
+      cards.forEach((c) => {
+        c.style.opacity = ""; c.style.transform = ""; c.style.filter = ""; c.style.removeProperty("--d");
+      });
+      bar.style.transform = "";
     };
 
     const layout = () => {
-      if (!wide.matches) {
-        hs.classList.remove("is-pinned");
-        hs.style.height = "";
-        hs.style.removeProperty("--k");
-        track.style.transform = "";
-        cards.forEach((c) => { c.style.opacity = ""; c.style.transform = ""; c.style.removeProperty("--d"); });
-        bar.style.transform = "";
-        return;
-      }
+      if (!wide.matches) { unpin(); onSwipe(); return; }
       hs.classList.add("is-pinned");
-      hs.style.setProperty("--k", Math.max(0.6, Math.min(1, (innerHeight - 120) / 640)).toFixed(3));
-      track.style.transform = "none";
-      cards.forEach((c) => { c.style.transform = "none"; });
       const vw = document.documentElement.clientWidth;
-      const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-      const trackLeft = track.getBoundingClientRect().left;
-      const last = cards[cards.length - 1].getBoundingClientRect();
-      max = Math.max(0, last.right - trackLeft + pad - vw);
+      // La carte s'adapte à l'écran : plus grande sur grand moniteur, réduite sur écran court
+      const k = Math.max(0.6, Math.min(1.5, (innerHeight - 120) / 640, (vw * 0.8) / 1080));
+      hs.style.setProperty("--k", k.toFixed(3));
+      track.style.transform = "none";
+      cards.forEach((c) => { c.style.transform = "none"; c.style.filter = ""; });
+      track.style.paddingLeft = track.style.paddingRight = "0px";
+      const rects = cards.map((c) => c.getBoundingClientRect());
+      const pad = Math.max(24, (vw - rects[0].width) / 2);   // la carte active est centrée
+      track.style.paddingLeft = track.style.paddingRight = `${pad}px`;
+      xs = rects.map((r) => r.left - rects[0].left);
+      max = xs[xs.length - 1];
       travel = Math.max(1, max + innerHeight * 0.25);
       hs.style.height = `${innerHeight + travel}px`;
       update();
     };
 
+    // Mobile / tablette : le compteur suit la carte visible
+    function onSwipe() {
+      if (hs.classList.contains("is-pinned")) return;
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bd = Infinity;
+      cards.forEach((c, i) => {
+        const dist = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+        if (dist < bd) { bd = dist; best = i; }
+      });
+      setActive(best);
+      bar.style.transform = `scaleX(${(best + 1) / cards.length})`;
+    }
+
+    steps.forEach((b, i) => b.addEventListener("click", () => {
+      if (hs.classList.contains("is-pinned")) {
+        const top = hs.getBoundingClientRect().top + scrollY;
+        const p = max ? xs[i] / max : 0;
+        scrollTo({ top: top + p * travel, behavior: calm.matches ? "auto" : "smooth" });
+      } else {
+        const c = cards[i];
+        track.scrollTo({ left: c.offsetLeft - (track.clientWidth - c.offsetWidth) / 2, behavior: "smooth" });
+      }
+    }));
+
     addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
     addEventListener("resize", layout);
     wide.addEventListener("change", layout);
+    calm.addEventListener("change", layout);
+    track.addEventListener("scroll", onSwipe, { passive: true });
     layout();
     addEventListener("load", layout);
-
-    // Mobile : le compteur suit la carte visible
-    track.addEventListener("scroll", () => {
-      if (hs.classList.contains("is-pinned")) return;
-      const mid = track.scrollLeft + track.clientWidth / 2;
-      let best = 0, bestDist = Infinity;
-      cards.forEach((c, i) => {
-        const dist = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
-        if (dist < bestDist) { bestDist = dist; best = i; }
-      });
-      count.textContent = String(best + 1).padStart(2, "0");
-      bar.style.transform = `scaleX(${(best + 1) / cards.length})`;
-    }, { passive: true });
   }
 
   /* ---------- Défilement infini des clients (bandeaux) ---------- */

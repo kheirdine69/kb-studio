@@ -440,21 +440,31 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 36px; }
 .hs-ui { display: flex; align-items: center; gap: 16px; padding: 0 22px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
 .hs-bar { flex: 1; height: 2px; border-radius: 2px; background: var(--line-2); overflow: hidden; }
 .hs-bar i { display: block; height: 100%; width: 100%; background: var(--grad); transform-origin: left; transform: scaleX(0.34); }
-.hs-count b { color: var(--text); font-size: 15px; }
+.hs-steps { display: flex; flex-wrap: wrap; gap: 8px; }
+.hs-steps button { display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font: 600 13.5px var(--body); letter-spacing: 0; text-transform: none; cursor: pointer; transition: color 0.3s, background 0.3s, border-color 0.3s, transform 0.3s var(--ease); }
+.hs-steps button b { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: var(--dim); transition: color 0.3s; }
+.hs-steps button:hover { color: var(--text); transform: translateY(-2px); }
+.hs-steps button.on { color: var(--text); background: var(--panel-2); border-color: rgba(43, 228, 240, 0.55); box-shadow: 0 8px 30px -12px rgba(43, 228, 240, 0.7); }
+.hs-steps button.on b { color: var(--cyan); }
+.project.hs-card { --a: var(--violet); --b: var(--cyan); position: relative; border-color: color-mix(in srgb, var(--a) 32%, var(--line)); background: radial-gradient(900px circle at 88% 12%, color-mix(in srgb, var(--a) 24%, transparent), transparent 58%), radial-gradient(760px circle at 6% 96%, color-mix(in srgb, var(--b) 20%, transparent), transparent 58%), rgba(255, 255, 255, 0.025); box-shadow: 0 40px 100px -50px color-mix(in srgb, var(--a) 60%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.07); }
+.project.hs-card > :not(.hs-ghost) { position: relative; z-index: 1; }
+.hs-ghost { position: absolute !important; z-index: 0 !important; right: -2%; bottom: -14%; font-family: var(--display); font-weight: 800; font-size: clamp(180px, 26vw, 320px); line-height: 0.8; letter-spacing: -0.07em; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--a) 45%, transparent); opacity: 0.55; pointer-events: none; user-select: none; }
+@media (max-width: 1000px) { .hs-ghost { font-size: 150px; right: 2%; bottom: -6%; } }
 .hs-hint-pin { display: none; }
 
 @media (min-width: 1001px) {
   .hs.is-pinned .hs-pin { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 30px; overflow: hidden; perspective: 1800px; }
   .hs.is-pinned .hs-track { overflow: visible; scroll-snap-type: none; gap: 44px; padding: 0 max(24px, calc((100vw - var(--wrap)) / 2)); will-change: transform; }
   .hs.is-pinned .hs-card { flex: 0 0 min(1080px, 86vw); max-width: none; height: 620px; zoom: var(--k, 1); padding: 40px clamp(28px, 4vw, 56px); transform-origin: center; will-change: transform, opacity; }
-  .hs.is-pinned .hs-card > div:first-child { transform: translate3d(calc(var(--d, 0) * 36px), 0, 0); }
+  .hs.is-pinned .hs-card > div:not(.phone-stage) { transform: translate3d(calc(var(--d, 0) * 36px), 0, 0); }
+  .hs.is-pinned .hs-ghost { transform: translate3d(calc(var(--d, 0) * -220px), 0, 0); }
   .hs.is-pinned .hs-card .phone-stage { min-height: 0; transform: translate3d(calc(var(--d, 0) * -90px), 0, 0); }
   .hs.is-pinned .hs-ui { padding: 0 max(24px, calc((100vw - var(--wrap)) / 2)); }
   .hs.is-pinned .hs-hint-pin { display: inline; }
   .hs.is-pinned .hs-hint-swipe { display: none; }
 }
 @media (max-width: 1000px) { .hs-hint-pin { display: none; } }
-@media (prefers-reduced-motion: reduce) { .hs-hint-pin { display: none; } .hs-hint-swipe { display: inline; } }
+@media (max-width: 640px) { .hs-ui { flex-wrap: wrap; row-gap: 14px; } .hs-bar { flex: 1 1 100%; order: 3; } .hs-hint { display: none; } .hs-steps button { padding: 8px 13px; font-size: 13px; } }
 
 /* ---------- Application interne + clientèle ---------- */
 .app-stage { min-height: 380px; padding: 46px 0; }

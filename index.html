@@ -379,7 +379,8 @@
         <div class="hs" id="hs">
         <div class="hs-pin">
         <div class="hs-track">
-        <div class="project hs-card">
+        <div class="project hs-card" style="--a:#8b5cff;--b:#2be4f0">
+          <span class="hs-ghost" aria-hidden="true">01</span>
           <div>
             <span class="eyebrow">Application mobile</span>
             <h3 class="grad">Trig</h3>
@@ -433,7 +434,8 @@
           </div>
         </div>
 
-        <div class="project alt hs-card">
+        <div class="project alt hs-card" style="--a:#b6ff5c;--b:#4f7dff">
+          <span class="hs-ghost" aria-hidden="true">02</span>
           <div>
             <span class="eyebrow">Logiciel Excel · BTP</span>
             <h3 class="grad long">Plans de contrôle</h3>
@@ -461,7 +463,8 @@
           </div>
         </div>
 
-        <div class="project hs-card">
+        <div class="project hs-card" style="--a:#ff4fd0;--b:#8b5cff">
+          <span class="hs-ghost" aria-hidden="true">03</span>
           <div>
             <span class="eyebrow">Application interne · Coaching</span>
             <h3 class="grad long">Personal Coach in Bennour</h3>
@@ -489,9 +492,13 @@
         </div>
 
         </div>
-        <div class="hs-ui" aria-hidden="true">
-          <span class="hs-count"><b>01</b> / 03</span>
-          <div class="hs-bar"><i></i></div>
+        <div class="hs-ui">
+          <div class="hs-steps" role="group" aria-label="Choisir un projet">
+            <button type="button" class="on"><b>01</b>Trig</button>
+            <button type="button"><b>02</b>Plans de contrôle</button>
+            <button type="button"><b>03</b>Personal Coach</button>
+          </div>
+          <div class="hs-bar" aria-hidden="true"><i></i></div>
           <span class="hs-hint hs-hint-pin">Faites défiler</span>
           <span class="hs-hint hs-hint-swipe">Glissez →</span>
         </div>
