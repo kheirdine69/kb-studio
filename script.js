@@ -220,6 +220,35 @@
     }, { passive: true });
   }
 
+  /* ---------- Défilement infini des clients (bandeaux) ---------- */
+  const buildMarquee = (mq) => {
+    const track = $(".mq-track", mq);
+    const set = $(".mq-set", track);
+    const orig = $$(":scope > :not([data-clone])", set);
+    $$("[data-clone]", set).forEach((n) => n.remove());
+    $$(".mq-set[data-clone]", track).forEach((n) => n.remove());
+    let guard = 0;
+    while (set.getBoundingClientRect().width < document.documentElement.clientWidth * 1.15 && guard++ < 24) {
+      orig.forEach((n) => {
+        const c = n.cloneNode(true);
+        c.setAttribute("data-clone", "");
+        c.setAttribute("aria-hidden", "true");
+        set.append(c);
+      });
+    }
+    const dup = set.cloneNode(true);
+    dup.setAttribute("data-clone", "");
+    dup.setAttribute("aria-hidden", "true");
+    track.append(dup);
+  };
+  const marquees = $$(".mq");
+  marquees.forEach(buildMarquee);
+  let mqTimer;
+  addEventListener("resize", () => {
+    clearTimeout(mqTimer);
+    mqTimer = setTimeout(() => marquees.forEach(buildMarquee), 250);
+  });
+
   /* ---------- Menu mobile ---------- */
   const burger = $(".burger");
   if (burger) {
