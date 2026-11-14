@@ -145,6 +145,81 @@
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
   onScroll();
 
+  /* ---------- Galerie de projets : défilement horizontal piloté par le scroll ---------- */
+  const hs = $("#hs");
+  if (hs) {
+    const track = $(".hs-track", hs);
+    const cards = $$(".hs-card", hs);
+    const bar = $(".hs-bar i", hs);
+    const count = $(".hs-count b", hs);
+    const wide = matchMedia("(min-width: 1001px) and (prefers-reduced-motion: no-preference)");
+    let max = 0;
+    let travel = 1;
+
+    const update = () => {
+      if (!hs.classList.contains("is-pinned")) return;
+      const top = hs.getBoundingClientRect().top;
+      const p = Math.min(1, Math.max(0, -top / travel));
+      track.style.transform = `translate3d(${-p * max}px,0,0)`;
+      bar.style.transform = `scaleX(${0.12 + p * 0.88})`;
+      const vw = document.documentElement.clientWidth;
+      let best = 0, bestDist = Infinity;
+      cards.forEach((c, i) => {
+        const r = c.getBoundingClientRect();
+        const d = (r.left + r.width / 2 - vw / 2) / vw;
+        const a = Math.min(1, Math.abs(d));
+        c.style.setProperty("--d", d.toFixed(3));
+        c.style.opacity = (1 - a * 0.6).toFixed(3);
+        c.style.transform = `scale(${(1 - a * 0.07).toFixed(3)}) rotateY(${(-d * 9).toFixed(2)}deg)`;
+        if (Math.abs(d) < bestDist) { bestDist = Math.abs(d); best = i; }
+      });
+      count.textContent = String(best + 1).padStart(2, "0");
+    };
+
+    const layout = () => {
+      if (!wide.matches) {
+        hs.classList.remove("is-pinned");
+        hs.style.height = "";
+        hs.style.removeProperty("--k");
+        track.style.transform = "";
+        cards.forEach((c) => { c.style.opacity = ""; c.style.transform = ""; c.style.removeProperty("--d"); });
+        bar.style.transform = "";
+        return;
+      }
+      hs.classList.add("is-pinned");
+      hs.style.setProperty("--k", Math.max(0.6, Math.min(1, (innerHeight - 120) / 640)).toFixed(3));
+      track.style.transform = "none";
+      cards.forEach((c) => { c.style.transform = "none"; });
+      const vw = document.documentElement.clientWidth;
+      const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+      const trackLeft = track.getBoundingClientRect().left;
+      const last = cards[cards.length - 1].getBoundingClientRect();
+      max = Math.max(0, last.right - trackLeft + pad - vw);
+      travel = Math.max(1, max + innerHeight * 0.25);
+      hs.style.height = `${innerHeight + travel}px`;
+      update();
+    };
+
+    addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
+    addEventListener("resize", layout);
+    wide.addEventListener("change", layout);
+    layout();
+    addEventListener("load", layout);
+
+    // Mobile : le compteur suit la carte visible
+    track.addEventListener("scroll", () => {
+      if (hs.classList.contains("is-pinned")) return;
+      const mid = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bestDist = Infinity;
+      cards.forEach((c, i) => {
+        const dist = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid);
+        if (dist < bestDist) { bestDist = dist; best = i; }
+      });
+      count.textContent = String(best + 1).padStart(2, "0");
+      bar.style.transform = `scaleX(${(best + 1) / cards.length})`;
+    }, { passive: true });
+  }
+
   /* ---------- Menu mobile ---------- */
   const burger = $(".burger");
   if (burger) {

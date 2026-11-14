@@ -38,7 +38,7 @@ body {
   font-family: var(--body);
   font-size: 17px;
   line-height: 1.65;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -429,6 +429,32 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 36px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form .btn { width: 100%; justify-content: center; margin-top: 8px; padding: 18px; font-size: 16.5px; }
 .form-hint { margin-top: 14px; font-size: 13.5px; color: var(--dim); text-align: center; }
+
+/* ---------- Galerie de projets (défilement horizontal) ---------- */
+.hs { position: relative; width: 100vw; margin-left: calc(50% - 50vw); }
+.hs-pin { position: relative; }
+.hs-track { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 8px 18px 22px; -webkit-overflow-scrolling: touch; }
+.hs-track::-webkit-scrollbar { display: none; }
+.hs-card { flex: 0 0 88vw; max-width: 760px; scroll-snap-align: center; margin: 0 !important; padding: 28px 22px; }
+.hs-card + .hs-card { margin-top: 0 !important; }
+.hs-ui { display: flex; align-items: center; gap: 16px; padding: 0 22px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.hs-bar { flex: 1; height: 2px; border-radius: 2px; background: var(--line-2); overflow: hidden; }
+.hs-bar i { display: block; height: 100%; width: 100%; background: var(--grad); transform-origin: left; transform: scaleX(0.34); }
+.hs-count b { color: var(--text); font-size: 15px; }
+.hs-hint-pin { display: none; }
+
+@media (min-width: 1001px) {
+  .hs.is-pinned .hs-pin { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 30px; overflow: hidden; perspective: 1800px; }
+  .hs.is-pinned .hs-track { overflow: visible; scroll-snap-type: none; gap: 44px; padding: 0 max(24px, calc((100vw - var(--wrap)) / 2)); will-change: transform; }
+  .hs.is-pinned .hs-card { flex: 0 0 min(1080px, 86vw); max-width: none; height: 620px; zoom: var(--k, 1); padding: 40px clamp(28px, 4vw, 56px); transform-origin: center; will-change: transform, opacity; }
+  .hs.is-pinned .hs-card > div:first-child { transform: translate3d(calc(var(--d, 0) * 36px), 0, 0); }
+  .hs.is-pinned .hs-card .phone-stage { min-height: 0; transform: translate3d(calc(var(--d, 0) * -90px), 0, 0); }
+  .hs.is-pinned .hs-ui { padding: 0 max(24px, calc((100vw - var(--wrap)) / 2)); }
+  .hs.is-pinned .hs-hint-pin { display: inline; }
+  .hs.is-pinned .hs-hint-swipe { display: none; }
+}
+@media (max-width: 1000px) { .hs-hint-pin { display: none; } }
+@media (prefers-reduced-motion: reduce) { .hs-hint-pin { display: none; } .hs-hint-swipe { display: inline; } }
 
 /* ---------- Application interne + clientèle ---------- */
 .app-stage { min-height: 380px; padding: 46px 0; }
