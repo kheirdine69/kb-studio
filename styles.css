@@ -430,6 +430,30 @@ footer { border-top: 1px solid var(--line); padding: 44px 0 36px; }
 .form .btn { width: 100%; justify-content: center; margin-top: 8px; padding: 18px; font-size: 16.5px; }
 .form-hint { margin-top: 14px; font-size: 13.5px; color: var(--dim); text-align: center; }
 
+/* ---------- Application interne + clientèle ---------- */
+.app-stage { min-height: 380px; padding: 46px 0; }
+.app-stage::before { background: radial-gradient(circle, rgba(139, 92, 255, 0.32), transparent 65%); }
+.app-stage .chip.c1 { top: 0; left: 4%; }
+.app-stage .chip.c3 { bottom: 0; left: auto; right: 4%; }
+.app { position: relative; width: min(440px, 100%); height: 290px; display: grid; grid-template-columns: 64px 1fr; border-radius: 18px; overflow: hidden; background: #0d1222; border: 1px solid var(--line-2); box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.9); animation: float 8s ease-in-out infinite; }
+.app-side { display: grid; align-content: start; gap: 14px; padding: 18px 0; justify-items: center; background: #101733; border-right: 1px solid var(--line); }
+.app-side i { width: 28px; height: 28px; border-radius: 9px; background: rgba(255, 255, 255, 0.08); }
+.app-side i:first-child { background: var(--grad); }
+.app-main { display: grid; grid-template-rows: auto auto 1fr; gap: 14px; padding: 18px; }
+.app-top { display: flex; justify-content: space-between; align-items: center; }
+.app-top b { width: 110px; height: 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.2); }
+.app-top s { width: 28px; height: 28px; border-radius: 50%; background: rgba(43, 228, 240, 0.35); }
+.app-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.app-stats span { height: 46px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); }
+.app-chart { display: flex; align-items: flex-end; gap: 10px; padding: 12px 12px 0; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); }
+.app-chart i { flex: 1; height: var(--h); border-radius: 6px 6px 0 0; background: linear-gradient(180deg, var(--violet), var(--cyan)); transform-origin: bottom; animation: grow 5s var(--ease) infinite; animation-delay: var(--t); }
+@keyframes grow { 0%, 6% { transform: scaleY(0.08); } 30%, 90% { transform: scaleY(1); } 100% { transform: scaleY(0.08); } }
+.clients { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; margin-top: 34px; padding: 22px 28px; border-radius: 22px; border: 1px dashed var(--line-2); }
+.client-list { display: flex; flex-wrap: wrap; gap: 12px; }
+.client-list span { padding: 10px 20px; border-radius: 999px; font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; border: 1px solid var(--line-2); background: var(--panel); }
+@media (max-width: 640px) { .app { height: 250px; grid-template-columns: 48px 1fr; } .clients { padding: 20px; } }
+@media (prefers-reduced-motion: reduce) { .app-chart i { transform: none; } }
+
 /* ---------- Pages de services ---------- */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .card-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-weight: 600; font-size: 14.5px; color: var(--c); transition: gap 0.3s var(--ease); }
