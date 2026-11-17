@@ -80,34 +80,17 @@
     ]
   }
   </script>
-  <meta name="theme-color" content="#05060b">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%238b5cff'/%3E%3Cstop offset='1' stop-color='%232be4f0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='800' font-size='26' fill='white' text-anchor='middle'%3EKB%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#f4f1ea">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%2315171a'/%3E%3Cstop offset='1' stop-color='%238a6a3d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='800' font-size='26' fill='white' text-anchor='middle'%3EKB%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
-  <div class="loader" aria-hidden="true">
-    <div class="loader-inner">
-      <div class="loader-mark">KB</div>
-      <div class="loader-bar"><i></i></div>
-      <div class="loader-count">000</div>
-    </div>
-  </div>
-
-  <div class="backdrop" aria-hidden="true">
-    <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-    <div class="grid-bg"></div>
-  </div>
-  <canvas id="particles" aria-hidden="true"></canvas>
-  <div class="grain" aria-hidden="true"></div>
   <div class="progress" aria-hidden="true"></div>
-  <div class="cursor-ring" aria-hidden="true"></div>
-  <div class="cursor-dot" aria-hidden="true"></div>
-
   <header class="nav">
     <a class="brand" href="#top"><span class="brand-mark">KB</span>KB Studio</a>
     <nav class="nav-links" aria-label="Navigation principale">
@@ -137,8 +120,24 @@
     <!-- ============ HERO ============ -->
     <section class="hero">
       <div class="wrap hero-inner">
-        <div class="orbit" aria-hidden="true"><span></span><span></span><span></span><b></b></div>
-
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 600 600" fill="none" stroke="currentColor" stroke-width="1">
+            <g class="art-ticks">
+              <circle cx="300" cy="300" r="262" stroke-width="14" stroke-dasharray="1.2 21.66"/>
+              <circle cx="300" cy="300" r="262" stroke-width="26" stroke-dasharray="2.4 134.78"/>
+            </g>
+            <circle class="draw" style="--dl:.3s" pathLength="1" cx="300" cy="300" r="290"/>
+            <circle class="draw" style="--dl:.6s" pathLength="1" cx="300" cy="300" r="232"/>
+            <circle class="draw" style="--dl:.9s" pathLength="1" cx="300" cy="300" r="170"/>
+            <circle class="draw" style="--dl:1.2s" pathLength="1" cx="300" cy="300" r="108"/>
+            <rect class="draw" style="--dl:1.5s" pathLength="1" x="196" y="196" width="208" height="208" transform="rotate(45 300 300)"/>
+            <line class="draw" style="--dl:1.1s" pathLength="1" x1="300" y1="4" x2="300" y2="596"/>
+            <line class="draw" style="--dl:1.3s" pathLength="1" x1="4" y1="300" x2="596" y2="300"/>
+            <g class="art-orbit"><circle cx="532" cy="300" r="5" fill="var(--accent)" stroke="none"/></g>
+            <text x="300" y="336" text-anchor="middle" fill="var(--ink)" stroke="none" style="font-family:var(--display);font-size:104px;font-weight:300;font-style:italic;letter-spacing:-0.04em">KB</text>
+          </svg>
+        </div>
+        
         <div class="badge reveal"><i class="pulse"></i>Basé en région lyonnaise · Disponible dans le monde entier</div>
 
         <h1 data-split style="--d:150ms">
@@ -150,10 +149,7 @@
 
         <div class="hero-sub">
           <div>
-            <p class="typed-line reveal" style="--d:700ms">
-              Kheir-dine Bennour, KB Studio.<br>
-              Je crée des <span class="typed" data-words='["logiciels sur mesure.","applications mobiles.","sites web.","automatisations IA.","solutions cloud."]'></span><span class="caret"></span>
-            </p>
+            <p class="typed-line reveal" style="--d:700ms">Kheir-dine Bennour, KB Studio.<br><span>Logiciels, applications, sites web, automatisations IA et cloud.</span></p>
           </div>
           <div class="reveal" style="--d:850ms">
             <p class="hero-desc">Ingénieur informatique spécialisé en IA, basé en région lyonnaise, diplômé d'un Mastère IA de Mines Paris. Je conçois, développe et déploie des outils numériques, à Lyon et à distance partout dans le monde.</p>
@@ -166,8 +162,7 @@
           </div>
         </div>
       </div>
-      <div class="scroll-hint" aria-hidden="true">Défiler<i></i></div>
-    </section>
+      </section>
 
     <!-- ============ BANDEAU ============ -->
     <div class="marquee" aria-hidden="true">
@@ -190,7 +185,7 @@
         </div>
 
         <div class="cards" data-stagger>
-          <article class="card reveal" style="--c:#8b5cff">
+          <article class="card reveal">
             <span class="card-num">01</span>
             <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M8 6l-6 6 6 6"/><path d="M16 6l6 6-6 6"/><path d="M14 4l-4 16"/></svg></div>
             <h3>Création de logiciels</h3>
@@ -199,7 +194,7 @@
             <a class="card-link" href="creation-logiciel-sur-mesure-lyon.html">En savoir plus <span aria-hidden="true">→</span></a>
           </article>
 
-          <article class="card reveal" style="--c:#2be4f0">
+          <article class="card reveal">
             <span class="card-num">02</span>
             <div class="card-icon"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg></div>
             <h3>Applications</h3>
@@ -208,7 +203,7 @@
             <a class="card-link" href="developpement-application-mobile-lyon.html">En savoir plus <span aria-hidden="true">→</span></a>
           </article>
 
-          <article class="card reveal" style="--c:#ff4fd0">
+          <article class="card reveal">
             <span class="card-num">03</span>
             <div class="card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2c3 3.5 3 16.500 0 20c-3-3.500-3-16.500 0-20"/></svg></div>
             <h3>Sites web</h3>
@@ -217,7 +212,7 @@
             <a class="card-link" href="creation-site-web-lyon.html">En savoir plus <span aria-hidden="true">→</span></a>
           </article>
 
-          <article class="card reveal" style="--c:#b6ff5c">
+          <article class="card reveal">
             <span class="card-num">04</span>
             <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 3l1.900 5.100L19 10l-5.100 1.900L12 17l-1.900-5.100L5 10l5.100-1.900z"/><path d="M19 15l.8 2.200L22 18l-2.200.8L19 21l-.8-2.200L16 18l2.200-.8z"/></svg></div>
             <h3>Automatisation IA</h3>
@@ -226,7 +221,7 @@
             <a class="card-link" href="automatisation-ia-lyon.html">En savoir plus <span aria-hidden="true">→</span></a>
           </article>
 
-          <article class="card reveal" style="--c:#4f7dff">
+          <article class="card reveal">
             <span class="card-num">05</span>
             <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M7 18a5 5 0 01-.5-9.970A6 6 0 0118 9a4.500 4.500 0 01-.5 9z"/><path d="M12 12v5"/><path d="M10 14l2-2 2 2"/></svg></div>
             <h3>Solutions cloud</h3>
@@ -235,7 +230,7 @@
             <a class="card-link" href="solutions-cloud-lyon.html">En savoir plus <span aria-hidden="true">→</span></a>
           </article>
 
-          <article class="card reveal" style="--c:#ffb84f">
+          <article class="card reveal">
             <span class="card-num">06</span>
             <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 00-4 10.500c.7.7 1 1.500 1 2.500h6c0-1 .3-1.800 1-2.500A6 6 0 0012 3z"/></svg></div>
             <h3>Conseil informatique</h3>
@@ -265,28 +260,16 @@
             </div>
           </div>
 
-          <div class="terminal reveal" aria-label="Profil présenté sous forme de code">
-            <div class="term-bar"><i></i><i></i><i></i><span>profil.ts</span></div>
-            <div class="term-body">
-<div><span class="c">// Qui suis-je ?</span></div>
-<div><span class="k">const</span> <span class="v">kheirdine</span> <span class="p">=</span> {</div>
-<div>  nom<span class="p">:</span> <span class="s">"Kheir-dine Bennour"</span>,</div>
-<div>  titre<span class="p">:</span> <span class="s">"Ingénieur informatique · IA"</span>,</div>
-<div>  entreprise<span class="p">:</span> <span class="s">"KB Studio"</span>,</div>
-<div>  diplomes<span class="p">:</span> [</div>
-<div>    <span class="s">"Mastère IA · Mines Paris"</span>,</div>
-<div>    <span class="s">"Bachelor Resp. de projet informatique"</span>,</div>
-<div>    <span class="s">"BTS SIO · option développement"</span>,</div>
-<div>    <span class="s">"Bac pro Commerce"</span>,</div>
-<div>  ],</div>
-<div>  expertises<span class="p">:</span> [<span class="s">"Logiciel"</span>, <span class="s">"Mobile"</span>, <span class="s">"Web"</span>,</div>
-<div>               <span class="s">"IA"</span>, <span class="s">"Cloud"</span>, <span class="s">"Conseil"</span>],</div>
-<div>  disponible<span class="p">:</span> <span class="n">true</span>,</div>
-<div>};</div>
-<div> </div>
-<div><span class="v">kheirdine</span>.<span class="k">construire</span>(<span class="s">"votre projet"</span>); <span class="c">// 🚀</span></div>
-            </div>
-          </div>
+          <aside class="profile reveal" aria-label="Profil">
+            <h3>Profil</h3>
+            <dl>
+              <dt>Nom</dt><dd>Kheir-dine Bennour</dd>
+              <dt>Fonction</dt><dd>Directeur technique · Ingénieur informatique spécialisé IA</dd>
+              <dt>Formation</dt><dd>Mastère Intelligence Artificielle, Mines Paris<br>Bachelor Responsable de projet informatique, ISITECH<br>BTS SIO option développement, Sciences-U<br>Bac pro Commerce, Lycée Japy</dd>
+              <dt>Expertises</dt><dd>Logiciel · Mobile · Web · IA · Cloud · Conseil</dd>
+              <dt>Zone</dt><dd>Région lyonnaise, et à distance dans le monde entier</dd>
+            </dl>
+          </aside>
         </div>
       </div>
     </section>
@@ -299,7 +282,7 @@
         <p class="lead reveal">La technique d'un côté, la relation client de l'autre : vous avez toujours le bon interlocuteur.</p>
 
         <div class="team" data-stagger>
-          <article class="member reveal" style="--c:#8b5cff">
+          <article class="member reveal">
             <div class="avatar">KB</div>
             <div>
               <h3>Kheir-dine Bennour</h3>
@@ -308,7 +291,7 @@
             </div>
           </article>
 
-          <article class="member reveal" style="--c:#2be4f0">
+          <article class="member reveal">
             <div class="avatar">NB</div>
             <div>
               <h3>Nacer Bennour</h3>
@@ -379,7 +362,7 @@
         <div class="hs" id="hs">
         <div class="hs-pin">
         <div class="hs-track">
-        <div class="project hs-card" style="--a:#8b5cff;--b:#2be4f0">
+        <div class="project hs-card">
           <span class="hs-ghost" aria-hidden="true">01</span>
           <div>
             <span class="eyebrow">Application mobile</span>
@@ -402,26 +385,26 @@
                 <svg viewBox="0 0 242 510" preserveAspectRatio="xMidYMid slice">
                   <defs>
                     <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
-                      <stop stop-color="#8b5cff"/><stop offset=".5" stop-color="#2be4f0"/><stop offset="1" stop-color="#ff4fd0"/>
+                      <stop stop-color="#c8a36a"/><stop offset=".5" stop-color="#e6d3ad"/><stop offset="1" stop-color="#fff3dc"/>
                     </linearGradient>
                   </defs>
-                  <rect width="242" height="510" fill="#0b1020"/>
-                  <g stroke="#1b2440" stroke-width="9" stroke-linecap="round" fill="none">
+                  <rect width="242" height="510" fill="#16181b"/>
+                  <g stroke="#2b2e33" stroke-width="9" stroke-linecap="round" fill="none">
                     <path d="M-10 95h270M-10 190h270M-10 290h270M-10 385h270"/>
                     <path d="M45-10v530M125-10v530M200-10v530"/>
                     <path d="M-10 250L260 130M-10 430L150 340"/>
                   </g>
-                  <g fill="#111935">
+                  <g fill="#1f2226">
                     <rect x="56" y="106" width="58" height="72" rx="8"/><rect x="136" y="204" width="54" height="74" rx="8"/>
                     <rect x="56" y="302" width="58" height="70" rx="8"/><rect x="136" y="106" width="54" height="40" rx="8"/>
                   </g>
                   <path class="route" d="M45 430V290H125V190H200V95H125V60" fill="none" stroke="url(#rg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                   <g font-family="Arial" font-size="10" font-weight="700" text-anchor="middle">
-                    <g class="stop" style="--t:0s"><circle cx="45" cy="430" r="11" fill="#8b5cff"/><text x="45" y="433.500" fill="#fff">1</text></g>
-                    <g class="stop" style="--t:.5s"><circle cx="45" cy="290" r="11" fill="#6f7dff"/><text x="45" y="293.500" fill="#fff">2</text></g>
-                    <g class="stop" style="--t:1.1s"><circle cx="125" cy="190" r="11" fill="#2be4f0"/><text x="125" y="193.500" fill="#04121a">3</text></g>
-                    <g class="stop" style="--t:1.7s"><circle cx="200" cy="95" r="11" fill="#7fb0f8"/><text x="200" y="98.500" fill="#04121a">4</text></g>
-                    <g class="stop" style="--t:2.3s"><circle cx="125" cy="60" r="11" fill="#ff4fd0"/><text x="125" y="63.500" fill="#fff">5</text></g>
+                    <g class="stop" style="--t:0s"><circle cx="45" cy="430" r="11" fill="#c8a36a"/><text x="45" y="433.500" fill="#15171a">1</text></g>
+                    <g class="stop" style="--t:.5s"><circle cx="45" cy="290" r="11" fill="#d6b886"/><text x="45" y="293.500" fill="#15171a">2</text></g>
+                    <g class="stop" style="--t:1.1s"><circle cx="125" cy="190" r="11" fill="#e6d3ad"/><text x="125" y="193.500" fill="#15171a">3</text></g>
+                    <g class="stop" style="--t:1.7s"><circle cx="200" cy="95" r="11" fill="#efe0c0"/><text x="200" y="98.500" fill="#15171a">4</text></g>
+                    <g class="stop" style="--t:2.3s"><circle cx="125" cy="60" r="11" fill="#fff3dc"/><text x="125" y="63.500" fill="#15171a">5</text></g>
                   </g>
                 </svg>
                 <div class="sheet">
@@ -434,7 +417,7 @@
           </div>
         </div>
 
-        <div class="project alt hs-card" style="--a:#b6ff5c;--b:#4f7dff">
+        <div class="project alt hs-card">
           <span class="hs-ghost" aria-hidden="true">02</span>
           <div>
             <span class="eyebrow">Logiciel Excel · BTP</span>
@@ -463,7 +446,7 @@
           </div>
         </div>
 
-        <div class="project hs-card" style="--a:#ff4fd0;--b:#8b5cff">
+        <div class="project hs-card">
           <span class="hs-ghost" aria-hidden="true">03</span>
           <div>
             <span class="eyebrow">Application interne · Coaching</span>
@@ -505,7 +488,13 @@
         </div>
         </div>
 
-        <div class="trust reveal">
+        
+      </div>
+    </section>
+
+    <!-- ============ CLIENTS ============ -->
+    <section id="clients" class="trust-section" style="padding:0">
+      <div class="trust reveal">
           <div class="trust-head">
             <span class="eyebrow">Ils me font confiance</span>
           </div>
@@ -513,9 +502,9 @@
           <div class="mq mq-cards" style="--dur:38s">
             <div class="mq-track">
               <div class="mq-set">
-                <div class="client-card" style="--c:#8b5cff"><i class="client-mono">TR</i><div><b>Trig</b><small>Application</small></div></div>
-                <div class="client-card" style="--c:#2be4f0"><i class="client-mono">NG</i><div><b>NGE</b><small>BTP</small></div></div>
-                <div class="client-card" style="--c:#b6ff5c"><i class="client-mono">PC</i><div><b>Personal Coach in Bennour</b><small>Coaching</small></div></div>
+                <div class="client-card"><i class="client-mono">TR</i><div><b>Trig</b><small>Application</small></div></div>
+                <div class="client-card"><i class="client-mono">NG</i><div><b>NGE</b><small>BTP</small></div></div>
+                <div class="client-card"><i class="client-mono">PC</i><div><b>Personal Coach in Bennour</b><small>Coaching</small></div></div>
               </div>
             </div>
           </div>
@@ -530,7 +519,6 @@
             </div>
           </div>
         </div>
-      </div>
     </section>
 
     <!-- ============ MÉTHODE ============ -->

@@ -1,13 +1,12 @@
-/* Kheir-dine Bennour — Portfolio : animations et interactions */
+/* KB Studio : interactions sobres */
 (() => {
   const html = document.documentElement;
   const body = document.body;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-  /* ---------- Découpage des titres en mots ---------- */
+  /* ---------- Titres découpés en mots ---------- */
   $$("[data-split]").forEach((el) => {
     let i = 0;
     const walk = (node) => {
@@ -35,33 +34,13 @@
     walk(el);
   });
 
-  /* ---------- Écran de chargement ---------- */
-  const loader = $(".loader");
+  /* ---------- Entrée de page ---------- */
+  $(".loader")?.remove();
   const start = () => {
     body.classList.add("ready");
     $$(".hero [data-split], .hero .reveal, .contact-hero [data-split], .contact-hero .reveal").forEach((el) => el.classList.add("in"));
   };
-  if (loader) {
-    const bar = $(".loader-bar i", loader);
-    const count = $(".loader-count", loader);
-    const seen = sessionStorage.getItem("kb-seen");
-    const dur = reduce || seen ? 250 : 1300;
-    const t0 = performance.now();
-    const tick = (t) => {
-      const p = Math.min(1, (t - t0) / dur);
-      const e = 1 - Math.pow(1 - p, 3);
-      bar.style.width = e * 100 + "%";
-      count.textContent = String(Math.round(e * 100)).padStart(3, "0");
-      if (p < 1) requestAnimationFrame(tick);
-      else {
-        sessionStorage.setItem("kb-seen", "1");
-        loader.classList.add("done");
-        setTimeout(start, 250);
-        setTimeout(() => loader.remove(), 1200);
-      }
-    };
-    requestAnimationFrame(tick);
-  } else start();
+  requestAnimationFrame(() => setTimeout(start, 120));
 
   /* ---------- Apparitions au défilement ---------- */
   const io = new IntersectionObserver(
@@ -70,13 +49,12 @@
     }),
     { threshold: 0.14, rootMargin: "0px 0px -6% 0px" }
   );
-  $$(".reveal, [data-split], .terminal").forEach((el) => {
+  $$(".reveal, [data-split]").forEach((el) => {
     if (!el.closest(".hero, .contact-hero")) io.observe(el);
   });
   $$("[data-stagger]").forEach((group) => {
     [...group.children].forEach((c, i) => c.style.setProperty("--d", i * 90 + "ms"));
   });
-  $$(".term-body div").forEach((l, i) => l.style.setProperty("--i", i));
 
   /* ---------- Compteurs ---------- */
   const cio = new IntersectionObserver((entries) => entries.forEach((e) => {
@@ -97,28 +75,9 @@
   }), { threshold: 0.6 });
   $$("[data-count]").forEach((el) => cio.observe(el));
 
-  /* ---------- Texte tapé ---------- */
-  const typed = $(".typed");
-  if (typed) {
-    const words = JSON.parse(typed.dataset.words);
-    if (reduce) typed.textContent = words[0];
-    else {
-      let w = 0, c = 0, del = false;
-      const loop = () => {
-        const word = words[w];
-        c += del ? -1 : 1;
-        typed.textContent = word.slice(0, c);
-        let wait = del ? 32 : 68;
-        if (!del && c === word.length) { del = true; wait = 1700; }
-        else if (del && c === 0) { del = false; w = (w + 1) % words.length; wait = 320; }
-        setTimeout(loop, wait);
-      };
-      setTimeout(loop, 1900);
-    }
-  }
-
   /* ---------- Défilement : barre, navigation, frise ---------- */
   const progress = $(".progress");
+  const heroArt = $(".hero-art");
   const nav = $(".nav");
   const timeline = $(".timeline");
   const sections = $$("section[id]");
@@ -129,6 +88,7 @@
     const y = scrollY;
     const max = html.scrollHeight - innerHeight;
     if (progress) progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+    if (heroArt && y < innerHeight * 1.2) heroArt.style.setProperty("--sy", `${(y * -0.1).toFixed(1)}px`);
     if (nav) {
       nav.classList.toggle("hide", y > lastY && y > 500 && !body.classList.contains("menu-open"));
       lastY = y;
@@ -179,14 +139,8 @@
         const r = c.getBoundingClientRect();
         const d = (r.left + r.width / 2 - vw / 2) / vw;
         const a = Math.min(1, Math.abs(d));
-        c.style.setProperty("--d", d.toFixed(3));
-        if (calm.matches) {
-          c.style.opacity = (1 - a * 0.5).toFixed(3);
-        } else {
-          c.style.opacity = (1 - a * 0.65).toFixed(3);
-          c.style.transform = `scale(${(1 - a * 0.09).toFixed(3)}) rotateY(${(-d * 10).toFixed(2)}deg)`;
-          c.style.filter = a > 0.03 ? `blur(${(a * 3).toFixed(2)}px)` : "";
-        }
+        c.style.setProperty("--d", calm.matches ? "0" : d.toFixed(3));
+        c.style.opacity = (1 - a * 0.55).toFixed(3);
         if (Math.abs(d) < bd) { bd = Math.abs(d); best = i; }
       });
       setActive(best);
@@ -198,33 +152,10 @@
       hs.style.removeProperty("--k");
       track.style.transform = "";
       track.style.paddingLeft = track.style.paddingRight = "";
-      cards.forEach((c) => {
-        c.style.opacity = ""; c.style.transform = ""; c.style.filter = ""; c.style.removeProperty("--d");
-      });
+      cards.forEach((c) => { c.style.opacity = ""; c.style.removeProperty("--d"); });
       bar.style.transform = "";
     };
 
-    const layout = () => {
-      if (!wide.matches) { unpin(); onSwipe(); return; }
-      hs.classList.add("is-pinned");
-      const vw = document.documentElement.clientWidth;
-      // La carte s'adapte à l'écran : plus grande sur grand moniteur, réduite sur écran court
-      const k = Math.max(0.6, Math.min(1.5, (innerHeight - 120) / 640, (vw * 0.8) / 1080));
-      hs.style.setProperty("--k", k.toFixed(3));
-      track.style.transform = "none";
-      cards.forEach((c) => { c.style.transform = "none"; c.style.filter = ""; });
-      track.style.paddingLeft = track.style.paddingRight = "0px";
-      const rects = cards.map((c) => c.getBoundingClientRect());
-      const pad = Math.max(24, (vw - rects[0].width) / 2);   // la carte active est centrée
-      track.style.paddingLeft = track.style.paddingRight = `${pad}px`;
-      xs = rects.map((r) => r.left - rects[0].left);
-      max = xs[xs.length - 1];
-      travel = Math.max(1, max + innerHeight * 0.25);
-      hs.style.height = `${innerHeight + travel}px`;
-      update();
-    };
-
-    // Mobile / tablette : le compteur suit la carte visible
     function onSwipe() {
       if (hs.classList.contains("is-pinned")) return;
       const mid = track.scrollLeft + track.clientWidth / 2;
@@ -236,6 +167,25 @@
       setActive(best);
       bar.style.transform = `scaleX(${(best + 1) / cards.length})`;
     }
+
+    const layout = () => {
+      if (!wide.matches) { unpin(); onSwipe(); return; }
+      hs.classList.add("is-pinned");
+      const vw = document.documentElement.clientWidth;
+      // La carte s'adapte à l'écran : plus grande sur grand moniteur, réduite sur écran court
+      const k = Math.max(0.6, Math.min(1.5, (innerHeight - 120) / 640, (vw * 0.8) / 1080));
+      hs.style.setProperty("--k", k.toFixed(3));
+      track.style.transform = "none";
+      track.style.paddingLeft = track.style.paddingRight = "0px";
+      const rects = cards.map((c) => c.getBoundingClientRect());
+      const pad = Math.max(24, (vw - rects[0].width) / 2);   // la carte active est centrée
+      track.style.paddingLeft = track.style.paddingRight = `${pad}px`;
+      xs = rects.map((r) => r.left - rects[0].left);
+      max = xs[xs.length - 1];
+      travel = Math.max(1, max + innerHeight * 0.25);
+      hs.style.height = `${innerHeight + travel}px`;
+      update();
+    };
 
     steps.forEach((b, i) => b.addEventListener("click", () => {
       if (hs.classList.contains("is-pinned")) {
@@ -251,7 +201,6 @@
     addEventListener("scroll", () => requestAnimationFrame(update), { passive: true });
     addEventListener("resize", layout);
     wide.addEventListener("change", layout);
-    calm.addEventListener("change", layout);
     track.addEventListener("scroll", onSwipe, { passive: true });
     layout();
     addEventListener("load", layout);
@@ -294,126 +243,6 @@
       burger.setAttribute("aria-expanded", open);
     });
     $$(".mobile-menu a").forEach((a) => a.addEventListener("click", () => body.classList.remove("menu-open")));
-  }
-
-  /* ---------- Curseur, cartes inclinées, boutons magnétiques ---------- */
-  if (fine && !reduce) {
-    const dot = $(".cursor-dot");
-    const ring = $(".cursor-ring");
-    let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
-    addEventListener("mousemove", (e) => {
-      mx = e.clientX; my = e.clientY;
-      body.classList.add("has-cursor");
-      dot.style.transform = `translate(${mx}px, ${my}px)`;
-    });
-    const follow = () => {
-      rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
-      ring.style.transform = `translate(${rx}px, ${ry}px)`;
-      requestAnimationFrame(follow);
-    };
-    follow();
-    document.addEventListener("mouseover", (e) => {
-      ring.classList.toggle("hover", !!e.target.closest("a, button, .card, .c-card, input, textarea, select"));
-    });
-
-    $$(".card, .c-card").forEach((card) => {
-      const tilt = card.classList.contains("card");
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width;
-        const y = (e.clientY - r.top) / r.height;
-        card.style.setProperty("--mx", x * 100 + "%");
-        card.style.setProperty("--my", y * 100 + "%");
-        if (tilt) card.style.transform = `rotateX(${(0.5 - y) * 12}deg) rotateY(${(x - 0.5) * 14}deg) translateY(-6px)`;
-      });
-      card.addEventListener("mouseleave", () => { if (tilt) card.style.transform = ""; });
-    });
-
-    $$(".magnetic").forEach((el) => {
-      el.addEventListener("mousemove", (e) => {
-        const r = el.getBoundingClientRect();
-        const x = e.clientX - r.left - r.width / 2;
-        const y = e.clientY - r.top - r.height / 2;
-        el.style.transform = `translate(${x * 0.28}px, ${y * 0.4}px)`;
-      });
-      el.addEventListener("mouseleave", () => { el.style.transform = ""; });
-    });
-
-    const orbit = $(".orbit");
-    if (orbit) addEventListener("mousemove", (e) => {
-      orbit.style.transform = `translate(${(e.clientX / innerWidth - 0.5) * -40}px, ${(e.clientY / innerHeight - 0.5) * -40}px)`;
-    });
-  }
-
-  /* ---------- Constellation de particules ---------- */
-  const canvas = $("#particles");
-  if (canvas && !reduce) {
-    const ctx = canvas.getContext("2d");
-    const colors = ["139,92,255", "43,228,240", "255,79,208", "255,255,255"];
-    let W, H, dpr, pts = [];
-    const mouse = { x: -9999, y: -9999 };
-    const resize = () => {
-      dpr = Math.min(devicePixelRatio || 1, 2);
-      W = innerWidth; H = innerHeight;
-      canvas.width = W * dpr; canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.min(110, Math.round((W * H) / 15000));
-      pts = Array.from({ length: n }, () => ({
-        x: Math.random() * W, y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 1.6 + 0.5, c: colors[(Math.random() * colors.length) | 0],
-      }));
-    };
-    resize();
-    addEventListener("resize", resize);
-    addEventListener("mousemove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    addEventListener("mouseout", () => { mouse.x = mouse.y = -9999; });
-    const LINK = 135;
-    const draw = () => {
-      if (!document.hidden) {
-        ctx.clearRect(0, 0, W, H);
-        for (const p of pts) {
-          const dx = p.x - mouse.x, dy = p.y - mouse.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < 26000) {
-            const f = (1 - d2 / 26000) * 0.6;
-            const d = Math.sqrt(d2) || 1;
-            p.vx += (dx / d) * f * 0.12; p.vy += (dy / d) * f * 0.12;
-          }
-          p.vx *= 0.985; p.vy *= 0.985;
-          const sp = Math.hypot(p.vx, p.vy);
-          if (sp < 0.12) { p.vx += (Math.random() - 0.5) * 0.05; p.vy += (Math.random() - 0.5) * 0.05; }
-          p.x += p.vx; p.y += p.vy;
-          if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10;
-          if (p.y < -10) p.y = H + 10; else if (p.y > H + 10) p.y = -10;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, 6.283);
-          ctx.fillStyle = `rgba(${p.c},0.85)`;
-          ctx.fill();
-        }
-        for (let i = 0; i < pts.length; i++) {
-          const a = pts[i];
-          for (let j = i + 1; j < pts.length; j++) {
-            const b = pts[j];
-            const dx = a.x - b.x, dy = a.y - b.y;
-            const d = dx * dx + dy * dy;
-            if (d < LINK * LINK) {
-              ctx.strokeStyle = `rgba(${a.c},${(1 - Math.sqrt(d) / LINK) * 0.22})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-            }
-          }
-          const mdx = a.x - mouse.x, mdy = a.y - mouse.y;
-          const md = mdx * mdx + mdy * mdy;
-          if (md < 40000) {
-            ctx.strokeStyle = `rgba(43,228,240,${(1 - Math.sqrt(md) / 200) * 0.45})`;
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(draw);
-    };
-    draw();
   }
 
   /* ---------- Contact : copier + formulaire ---------- */
