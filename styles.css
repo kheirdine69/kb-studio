@@ -513,3 +513,19 @@ body::after { content: ""; position: fixed; inset: 0; z-index: 99; pointer-event
 @media (prefers-reduced-motion: reduce) { .hero-art .draw { stroke-dashoffset: 0; } .art-ticks, .art-orbit { animation: none; } }
 #projet .project { color: var(--ink); }
 .profile dd a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Section « sur mesure » : bande sombre pour marquer le message */
+#surmesure { background: var(--night); color: var(--bg); overflow: hidden; }
+#surmesure::before { content: ""; position: absolute; right: -200px; top: -200px; width: 680px; height: 680px; border-radius: 50%; pointer-events: none; background: repeating-radial-gradient(circle, transparent 0 58px, rgba(244, 241, 234, 0.07) 59px 60px); -webkit-mask-image: radial-gradient(circle, #000 25%, transparent 70%); mask-image: radial-gradient(circle, #000 25%, transparent 70%); }
+#surmesure .wrap { position: relative; }
+#surmesure .title { color: var(--bg); font-size: clamp(40px, 6.6vw, 96px); line-height: 1; }
+#surmesure .eyebrow, #surmesure .grad, #surmesure .grad .wi { color: var(--accent-2); }
+#surmesure .lead { color: rgba(244, 241, 234, 0.74); max-width: 700px; }
+#surmesure .steps { margin-top: clamp(44px, 6vw, 72px); border-top-color: rgba(244, 241, 234, 0.25); }
+#surmesure .step::before { color: var(--accent-2); }
+#surmesure .step::after { background: var(--accent-2); }
+#surmesure .step h3 { color: var(--bg); }
+#surmesure .step:hover h3 { color: var(--accent-2); }
+#surmesure .step p { color: rgba(244, 241, 234, 0.7); }
+@media (max-width: 640px) { #surmesure .title { font-size: clamp(32px, 9.5vw, 44px); } }
+.hero-art { top: 36%; width: min(500px, 36vw); opacity: 0.9; }
