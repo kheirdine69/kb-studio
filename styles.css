@@ -512,3 +512,4 @@ body::after { content: ""; position: fixed; inset: 0; z-index: 99; pointer-event
 @media (max-width: 820px) { .hero-art { top: 140px; right: -22vw; width: 86vw; opacity: 0.32; transform: translateY(var(--sy, 0px)); } }
 @media (prefers-reduced-motion: reduce) { .hero-art .draw { stroke-dashoffset: 0; } .art-ticks, .art-orbit { animation: none; } }
 #projet .project { color: var(--ink); }
+.profile dd a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
